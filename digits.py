@@ -15,8 +15,8 @@ hand-written digits, from 0-9.
 import matplotlib.pyplot as plt
 
 # Import datasets, classifiers and performance metrics
+from utils import get_data_split, get_preprocess_data, train_model, get_digits_dataset, split_train_dev_test, predict_and_eval
 from sklearn import metrics
-from utils import get_data_split, get_preprocess_data, train_model, get_digits_dataset
 
 ###############################################################################
 # Digits dataset
@@ -40,15 +40,24 @@ from utils import get_data_split, get_preprocess_data, train_model, get_digits_d
 
 x, y = get_digits_dataset()
 
-X_train, X_test, y_train, y_test = get_data_split(x, y, test_size=0.3)
+X_train, X_dev, X_test, y_train, y_dev, y_test = split_train_dev_test(x, y, test_size=0.3, dev_size=0.2)
 
 X_train = get_preprocess_data(X_train)
+X_dev = get_preprocess_data(X_dev)
 X_test = get_preprocess_data(X_test)
 
 model = train_model(X_train, y_train, {'gamma': 0.001}, model_type='svm')
 
+#validate 
+predicted = model.predict(X_dev)
+score = model.score(X_dev, y_dev)
+
+print(
+    f"Model performance on development set {score}\n"
+)
+
 # Predict the value of the digit on the test subset
-predicted = model.predict(X_test)
+predicted, model_classification, confusion_matrix = predict_and_eval(model, X_test, y_test)
 
 ###############################################################################
 # Below we visualize the first 4 test samples and show their predicted
@@ -67,14 +76,14 @@ predicted = model.predict(X_test)
 
 print(
     f"Classification report for classifier {model}:\n"
-    f"{metrics.classification_report(y_test, predicted)}\n"
+    f"{model_classification}\n"
 )
 
 ###############################################################################
 # We can also plot a :ref:`confusion matrix <confusion_matrix>` of the
 # true digit values and the predicted digit values.
 
-disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
+disp = confusion_matrix
 disp.figure_.suptitle("Confusion Matrix")
 print(f"Confusion matrix:\n{disp.confusion_matrix}")
 
