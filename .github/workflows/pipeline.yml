@@ -11,5 +11,5 @@ jobs:
         uses: actions/checkout@v2
       - name: Install dep
         run:  pip3 install --no-cache-dir -r requirements.txt
-      - name: Run pytho file
+      - name: Run python file
         run: python digits.py
