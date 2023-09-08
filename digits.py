@@ -47,6 +47,7 @@ test_size = [0.1, 0.2, 0.3]
 
 combined_size_list = product(dev_size, test_size)
 
+# check for different train, dev and test samples
 for dev_s, test_s in combined_size_list:
     x, y = get_digits_dataset()
 
@@ -66,7 +67,7 @@ for dev_s, test_s in combined_size_list:
 
 
 #model = train_model(X_train, y_train, {
-# 'gamma': 0.001}, model_type='svm')
+#'gamma': 0.001}, model_type='svm')
 
 #validate 
 #predicted = model.predict(X_dev)

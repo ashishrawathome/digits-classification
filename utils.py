@@ -38,13 +38,6 @@ def get_digits_dataset():
     y = digits.target
     return x, y
 
-def predict_and_eval(model, X_test, y_test):
-    predicted = model.predict(X_test)
-    model_classification = metrics.classification_report(y_test, predicted)
-    accuracy_score = metrics.accuracy_score(y_test, predicted)
-    confusion_matrix = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-    return predicted, model_classification, accuracy_score, confusion_matrix
-
 def tune_hparams(X_train, Y_train, X_dev, y_dev, list_of_all_param_combination):
     best_accuracy = -1
     accuracy_score_dev = -1
@@ -62,3 +55,10 @@ def tune_hparams(X_train, Y_train, X_dev, y_dev, list_of_all_param_combination):
             best_model = cur_m
             best_hparams = {g, c}
     return best_hparams, best_model, accuracy_score_train, best_accuracy
+
+def predict_and_eval(model, X_test, y_test):
+    predicted = model.predict(X_test)
+    model_classification = metrics.classification_report(y_test, predicted)
+    accuracy_score = metrics.accuracy_score(y_test, predicted)
+    confusion_matrix = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
+    return predicted, model_classification, accuracy_score, confusion_matrix
