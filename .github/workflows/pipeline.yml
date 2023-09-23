@@ -1,0 +1,16 @@
+name: GitHub Actions Demo
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10.8]
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Install dep
+        run:  pip3 install --no-cache-dir -r requirements.txt
+      - name: Run python file for digits classification
+        run:  python digits.py
+              echo "Added as part of Quiz 1 - Python Script ran successfully"
