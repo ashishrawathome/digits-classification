@@ -13,4 +13,6 @@ jobs:
         run:  pip3 install --no-cache-dir -r requirements.txt
       - name: Run python file for digits classification
         run:  python digits.py
-              echo "Added as part of Quiz 1 - Python Script ran successfully"
+      - name: Final Report
+        run: |
+            echo "Added as part of Quiz 1 - Python Script ran successfully"
