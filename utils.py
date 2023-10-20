@@ -1,7 +1,7 @@
 from sklearn.model_selection import train_test_split
 from sklearn import datasets, metrics, svm
 from itertools import product
-
+from sklearn import tree
 
 # Preprocess data
 def get_preprocess_data(data):
@@ -26,9 +26,17 @@ def train_model(x, y, model_params, model_type='svm'):
     if model_type == 'svm':
         # Create a classifier: a support vector classifier
         clf = svm.SVC
-    model = clf(**model_params)
-    # Learn the digits on the train subset
-    model.fit(x, y)
+
+        model = clf(**model_params)
+        
+        # Learn the digits on the train subset
+        model.fit(x, y)
+    
+    if model_type == 'tree':
+        model = tree.DecisionTreeClassifier(**model_params)
+
+        model.fit(x, y)
+    
     return model
 
 def get_digits_dataset():
@@ -54,6 +62,24 @@ def tune_hparams(X_train, Y_train, X_dev, y_dev, list_of_all_param_combination):
             best_accuracy = accuracy_score_dev
             best_model = cur_m
             best_hparams = {g, c}
+    return best_hparams, best_model, accuracy_score_train, best_accuracy
+
+def tune_hparams_decision_tree(X_train, Y_train, X_dev, y_dev, params):
+    best_accuracy = -1
+    accuracy_score_dev = -1
+    accuracy_score_train = -1
+    best_model = None
+    best_hparams = 0
+
+    for d in params:
+        cur_m = train_model(X_train, Y_train, {'max_depth': d}, model_type='tree')
+        predicted, model_classification, accuracy_score_train, confusion_matrix = predict_and_eval(cur_m, X_train, Y_train)
+        predicted, model_classification, accuracy_score_dev, confusion_matrix = predict_and_eval(cur_m, X_dev, y_dev)
+
+        if accuracy_score_dev > best_accuracy:
+            best_accuracy = accuracy_score_dev
+            best_model = cur_m
+            best_hparams = d
     return best_hparams, best_model, accuracy_score_train, best_accuracy
 
 def predict_and_eval(model, X_test, y_test):
