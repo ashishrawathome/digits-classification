@@ -12,4 +12,4 @@ jobs:
       - name: Install dep
         run:  pip3 install --no-cache-dir -r requirements.txt
       - name: Run python file for digits classification
-        run: python digits.py
+        run: python digits.py 0.3 0.3 0.002 0.2 20
