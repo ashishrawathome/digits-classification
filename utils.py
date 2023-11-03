@@ -2,6 +2,7 @@ from sklearn.model_selection import train_test_split
 from sklearn import datasets, metrics, svm
 from itertools import product
 from sklearn import tree
+from sklearn.metrics import confusion_matrix
 
 # Preprocess data
 def get_preprocess_data(data):
@@ -86,5 +87,18 @@ def predict_and_eval(model, X_test, y_test):
     predicted = model.predict(X_test)
     model_classification = metrics.classification_report(y_test, predicted)
     accuracy_score = metrics.accuracy_score(y_test, predicted)
-    confusion_matrix = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-    return predicted, model_classification, accuracy_score, confusion_matrix
+    precision_score = metrics.precision_score(y_test, predicted, average='macro')
+    conf_matrix = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
+
+    # Print Confusion matrix
+    m = confusion_matrix(y_test, predicted)
+    print(m)
+
+    print("Accuracy Score => " + str(accuracy_score))
+    print("Precision Score => " + str(precision_score))
+
+    #F1-score
+    f1_score = metrics.f1_score(y_test, predicted, average='macro')
+    print("F1-Score => " + str(f1_score))
+
+    return predicted, model_classification, accuracy_score, conf_matrix

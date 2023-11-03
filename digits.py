@@ -22,6 +22,7 @@ import sys
 from utils import get_data_split, get_preprocess_data, train_model, get_digits_dataset, split_train_dev_test, predict_and_eval, tune_hparams, tune_hparams_decision_tree
 from sklearn import metrics
 from itertools import product
+from keras.datasets import mnist
 
 ###############################################################################
 # Defaults
@@ -49,6 +50,8 @@ gamma_list = float(sys.argv[3])
 c_range_list = float(sys.argv[4])
 tree_depth = int(sys.argv[5])
 
+#python digits.py 0.3 0.3 0.002 0.2 20
+
 ###############################################################################
 # Preprocess
 # --------------
@@ -62,6 +65,8 @@ for dev_s, test_s in combined_size_list:
     x, y = get_digits_dataset()
 
     X_train, X_dev, X_test, y_train, y_dev, y_test = split_train_dev_test(x, y, test_size=test_s, dev_size=dev_s)
+    #(X_train, y_train), (X_test, y_test) = mnist.load_data()
+    #X_train, X_dev, X_test, y_train, y_dev, y_test = split_train_dev_test(X_train, y_train, test_size=test_s, dev_size=dev_s)
 
     X_train = get_preprocess_data(X_train)
     X_dev = get_preprocess_data(X_dev)
