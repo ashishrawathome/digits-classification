@@ -6,6 +6,8 @@ from sklearn.metrics import confusion_matrix
 
 import joblib
 import pickle
+from PIL import Image
+import numpy as np
 
 # Preprocess data
 def get_preprocess_data(data):
@@ -118,3 +120,17 @@ def predict_and_eval(model, X_test, y_test):
     print("F1-Score => " + str(f1_score))
 
     return predicted, model_classification, accuracy_score, conf_matrix
+
+def predict_and_compare(model, img1, img2):
+    predicted_img1 = model.predict(img1)
+    predicted_img2 = model.predict(img2)
+
+    print("Input 1 :") 
+    print(Image.fromarray(np.array(img1)))
+    print("Input 2 :") 
+    print(Image.fromarray(np.array(img2)))
+
+    if (predicted_img1 == predicted_img2):
+        print("True")
+    else:
+        print("False")

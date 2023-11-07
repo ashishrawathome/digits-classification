@@ -1,9 +1,15 @@
 #FROM ubuntu:23.10
 FROM python:3.9.17
 COPY . /digits/
-#RUN apt-get update
-#RUN apt-get install -y python3 python3-pip
 RUN pip3 install -r /digits/requirements.txt
 WORKDIR /digits
+# VOLUME ["/digits"]
+
+# Export flask
+ENV FLASK_APP="API/hello"
+# EXPOSE 5000
+# CMD ["flask", "run"]
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+
 # CMD ["pytest"]
-CMD ["python", "digits.py", "0.3", "0.3", "0.002", "0.2", "20"]
+# CMD ["python", "digits.py", "0.3", "0.3", "0.002", "0.2", "20"]
