@@ -25,13 +25,13 @@ def get_preprocess_data(data):
 # Dataset split
 def get_data_split(x, y, test_size, random_state=1):
     X_train, X_test, y_train, y_test = train_test_split(
-        x, y, test_size=0.5, random_state=random_state
+        x, y, test_size=test_size, random_state=random_state
     )
     return X_train, X_test, y_train, y_test
 
 def split_train_dev_test(X, y, test_size, dev_size):
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=1)
-    X_train, X_dev, y_train, y_dev = train_test_split(X_train, y_train, test_size=dev_size/(1-test_size), random_state=1)
+    X_train_dev, X_test, y_train_dev, y_test = train_test_split(X, y, test_size=test_size, shuffle = True, random_state=1)
+    X_train, X_dev, y_train, y_dev = train_test_split(X_train_dev, y_train_dev, test_size=(dev_size/(1-test_size)), shuffle = True, random_state=1)
     return X_train, X_dev, X_test, y_train, y_dev, y_test
 
 def train_model(x, y, model_params, model_type='svm'):

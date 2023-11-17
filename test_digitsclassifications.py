@@ -1,4 +1,4 @@
-from utils import get_hyperparameter_combinations, train_test_dev_split,read_digits, tune_hparams, preprocess_data
+from utils import get_hyperparameter_combinations, split_train_dev_test,get_digits_dataset, tune_hparams, get_preprocess_data
 import os
 
 def test_for_hparam_cominations_count():
@@ -22,15 +22,15 @@ def create_test_hyperparameter():
     return h_p_combinations
 
 def create_dummy_data():
-    X, y = read_digits()
+    X, y = get_digits_dataset()
     
     X_train = X[:100,:,:]
     y_train = y[:100]
     X_dev = X[:50,:,:]
     y_dev = y[:50]
 
-    X_train = preprocess_data(X_train)
-    X_dev = preprocess_data(X_dev)
+    X_train = get_preprocess_data(X_train)
+    X_dev = get_preprocess_data(X_dev)
 
     return X_train, y_train, X_dev, y_dev
 
@@ -46,13 +46,13 @@ def test_model_saving():
     X_train, y_train, X_dev, y_dev = create_dummy_data()
     h_p_combinations = create_test_hyperparameter()
 
-    _, best_model_path, _ = tune_hparams(X_train, y_train, X_dev, 
+    best_hparams, best_model_path, best_model, best_accuracy = tune_hparams(X_train, y_train, X_dev, 
         y_dev, h_p_combinations)   
-
+    
     assert os.path.exists(best_model_path)
 
 def test_data_splitting():
-    X, y = read_digits()
+    X, y = get_digits_dataset()
     
     X = X[:100,:,:]
     y = y[:100]
@@ -60,7 +60,7 @@ def test_data_splitting():
     test_size = .1
     dev_size = .6
 
-    X_train, X_test, X_dev, y_train, y_test, y_dev = train_test_dev_split(X, y, test_size=test_size, dev_size=dev_size)
+    X_train, X_dev, X_test, y_train, y_dev, y_test = split_train_dev_test(X, y, test_size=test_size, dev_size=dev_size)
 
     assert (len(X_train) == 30) 
     assert (len(X_test) == 10)
