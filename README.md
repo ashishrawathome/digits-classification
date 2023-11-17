@@ -1,1 +1,1 @@
-This is my initial checkin for Assignment 2
+This application helps in digits classification.
