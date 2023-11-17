@@ -1,3 +1,4 @@
+import os
 from sklearn.model_selection import train_test_split
 from sklearn import datasets, metrics, svm, tree
 from joblib import dump
@@ -84,6 +85,9 @@ def tune_hparams(X_train, Y_train, X_dev, y_dev, list_of_all_param_combination, 
     best_model_path = ""
     best_hparams = {-1, -1}
 
+    if not os.path.exists("./models"):
+        os.makedirs("./models")
+        
     for params in list_of_all_param_combination:
         cur_m = train_model(X_train, Y_train, params, model_type)
         predicted, model_classification, accuracy_score_dev, f1_score, confusion_matrix = predict_and_eval(cur_m, X_dev, y_dev)
