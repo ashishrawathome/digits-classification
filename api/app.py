@@ -6,6 +6,7 @@ app = Flask(__name__)
 model_path = "models/svm_gamma:0.001_C:1.joblib"
 model = load(model_path)
 
+
 @app.route("/")
 def hello_world():
     return "<!-- hello --> <b> Hello, World!</b>"
@@ -22,7 +23,7 @@ def checkModel(x, y):
 def predict_digit():
     image = request.json['image']
     pred = int(model.predict([image]))
-    
+
     return {"y_predicted":pred, "status_code": 200}
 
 
