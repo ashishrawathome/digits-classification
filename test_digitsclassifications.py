@@ -3,6 +3,24 @@ from api.app import app
 import os
 import pytest
 import json
+from joblib import load
+
+def test_for_all_logisticregression_models():
+    files = [filename for filename in os.listdir('models/') if filename.startswith("M22AIE201_lr_")]
+    solvers = ['lbfgs', 'liblinear', 'newton-cg', 'newton-cholesky', 'sag', 'saga']
+    for m in solvers:
+        model = load('models/M22AIE201_lr_' + str(m) + '.joblib')
+
+    assert(True)
+
+def test_for_all_logisticregression_models():
+    files = [filename for filename in os.listdir('models/') if filename.startswith("M22AIE201_lr_")]
+    solvers = ['lbfgs', 'liblinear', 'newton-cg', 'newton-cholesky', 'sag', 'saga']
+    for m in solvers:
+        model = load('models/M22AIE201_lr_' + str(m) + '.joblib')
+        params = model.get_params()
+
+        assert(m, params['solver'])
 
 def test_for_hparam_cominations_count():
     # a test case to check that all possible combinations of paramers are indeed generated

@@ -1,7 +1,9 @@
 import os
 from sklearn.model_selection import train_test_split
-from sklearn import datasets, metrics, svm, tree
+from sklearn import preprocessing
+from sklearn import datasets, metrics, svm, tree, linear_model
 from joblib import dump
+import numpy as np
 
 def get_combinations(param_name, param_values, base_combinations):    
     new_combinations = []
@@ -21,7 +23,8 @@ def get_hyperparameter_combinations(dict_of_param_lists):
 def get_preprocess_data(data):
     n_samples = len(data)
     data = data.reshape((n_samples, -1))
-    return data
+    normalized_arr = preprocessing.normalize(data.reshape(data.shape[0],-1), norm='max', axis=0).reshape(data.shape)
+    return normalized_arr
 
 # Dataset split
 def get_data_split(x, y, test_size, random_state=1):
@@ -41,6 +44,9 @@ def train_model(x, y, model_params, model_type='svm'):
 
     if model_type == 'tree':
         clf = tree.DecisionTreeClassifier
+
+    if model_type == 'lr':
+        clf = linear_model.LogisticRegression
 
     model = clf(**model_params)  
     model.fit(x, y)
@@ -96,8 +102,12 @@ def tune_hparams(X_train, Y_train, X_dev, y_dev, list_of_all_param_combination, 
             best_accuracy = accuracy_score_dev
             best_model = cur_m
             best_hparams = params
-            best_model_path = "./models/{}_".format(str(model_type)) +"_".join(["{}:{}".format(k,v) for k,v in params.items()]) + ".joblib"
-    
-    dump(best_model, best_model_path) 
+            best_model_path = "./models/{}_".format(str(model_type)) + "_".join(["{}:{}".format(k,v) for k,v in params.items()]) + ".joblib"
+
+        if model_type == 'lr':
+            lr_model_path = "./models/M22AIE201_lr_" + "_".join(["{}".format(v) for k,v in params.items()]) + ".joblib"
+            dump(cur_m, lr_model_path) 
+        
+    dump(best_model, best_model_path)
 
     return best_hparams, best_model_path, best_model, best_accuracy

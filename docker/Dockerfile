@@ -1,23 +1,11 @@
-#FROM ubuntu:23.10
-FROM python:3.9.17
+FROM digits_dependencies:latest
 
 COPY . /digits/
-
 WORKDIR /digits
-RUN pip3 install -r requirements.txt
-# WORKDIR /digits
+
+# Run test cases
+RUN pytest
 
 # Export flask
 ENV FLASK_APP="api/app"
-# CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
-CMD ["python", "api/app.py"]
-
-##FROM ubuntu:23.10
-#FROM python:3.9.17
-#COPY . /digits/
-#RUN pip3 install -r /digits/requirements.txt
-#WORKDIR /digits
-
-## Export flask
-#ENV FLASK_APP="api/app"
-#CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
