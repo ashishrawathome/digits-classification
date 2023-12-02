@@ -20,7 +20,7 @@ jobs:
       - run: echo "This job's status is ${{ job.status }}."
       - name: Install dependencies
         run:  pip3 install --no-cache-dir -r requirements.txt
-      - name: Run Pytest
-        run: pytest
       - name: Run digits classification model
         run: python digits.py
+      - name: Run Pytest
+        run: pytest
